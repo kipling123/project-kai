@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+body {
+  background: linear-gradient(to right, #ffffff);
+  color: #ff7300;
+  font-family: 'Segoe UI', sans-serif;
+}

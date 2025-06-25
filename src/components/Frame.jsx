@@ -24,13 +24,8 @@ import AdfScannerIcon from "@mui/icons-material/AdfScanner";
 import CategoryIcon from "@mui/icons-material/Category";
 import { Link, useLocation } from "react-router-dom";
 import { Avatar, Collapse, Menu, MenuItem, Tooltip } from "@mui/material";
-import {
-  ExpandLess,
-  ExpandMore,
-  Logout,
-  PersonAdd,
-  Settings,
-} from "@mui/icons-material";
+import { ExpandLess, ExpandMore, Logout, Settings } from "@mui/icons-material";
+import kaiLogo from "../assets/pt-kai-kereta-api-indonesia-2020-seeklogo.png";
 
 const drawerWidth = 240;
 
@@ -56,6 +51,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  background: "linear-gradient(to right, #FF8C00, #FFA500)",
+  boxShadow: "0 4px 12px rgba(255, 140, 0, 0.4)",
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -74,9 +71,8 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
+  justifyContent: "space-between",
 }));
 
 export default function Frame({ children }) {
@@ -84,8 +80,8 @@ export default function Frame({ children }) {
   const [open, setOpen] = React.useState(true);
   const location = useLocation();
   const [inventory, setInventory] = React.useState(false);
-
   const [anchorEl, setAnchorEl] = React.useState(null);
+
   const profile = Boolean(anchorEl);
   const handleOpenProfile = (event) => {
     setAnchorEl(event.currentTarget);
@@ -97,11 +93,9 @@ export default function Frame({ children }) {
   const handleClick = () => {
     setInventory(!inventory);
   };
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -121,17 +115,38 @@ export default function Frame({ children }) {
             <MenuIcon />
           </IconButton>
           <div className="flex flex-row items-center justify-between w-full">
-            <Typography variant="h6" noWrap component="div">
-              Rull Corp
+            <Typography variant="h6" noWrap component="div" sx={{ color: "#fff", fontWeight: 'bold' }}>
+              PT KERETA API BALAI YASA & LAA
             </Typography>
+            
+            <Box sx={{ 
+              display: 'flex', 
+              gap: '20px',
+              marginRight: '20px',
+              '& .menu-item': {
+                color: 'white',
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                }
+              }
+            }}>
+              <Link to="/" className="menu-item">Home</Link>
+              <Link to="/machine" className="menu-item">Machine</Link>
+              <Link to="/material" className="menu-item">Material</Link>
+              <Link to="/products" className="menu-item">Products</Link>
+              <Link to="/warehouse" className="menu-item">Warehouse</Link>
+              <Link to="/profile" className="menu-item">Profile</Link>
+            </Box>
+
             <React.Fragment>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
-              >
+              <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
                 <Tooltip title="Account settings">
                   <IconButton
                     onClick={handleOpenProfile}
@@ -141,7 +156,17 @@ export default function Frame({ children }) {
                     aria-haspopup="true"
                     aria-expanded={open ? "true" : undefined}
                   >
-                    <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                    <Avatar
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        background: "linear-gradient(to right, #FF8C00, #FFA500)",
+                        boxShadow: "0 0 8px rgba(255, 140, 0, 0.8)",
+                        color: "white",
+                      }}
+                    >
+                      M
+                    </Avatar>
                   </IconButton>
                 </Tooltip>
               </Box>
@@ -203,6 +228,7 @@ export default function Frame({ children }) {
           </div>
         </Toolbar>
       </AppBar>
+
       <Drawer
         sx={{
           width: drawerWidth,
@@ -210,6 +236,10 @@ export default function Frame({ children }) {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
+            background: "rgba(30, 30, 30, 0.9)",
+            backdropFilter: "blur(8px)",
+            borderRight: "1px solid rgba(255,255,255,0.1)",
+            color: "#fff",
           },
         }}
         variant="persistent"
@@ -217,158 +247,89 @@ export default function Frame({ children }) {
         open={open}
       >
         <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
-            )}
+          <img src={kaiLogo} alt="KAI Logo" style={{ height: 40, marginLeft: 10 }} />
+          <IconButton onClick={handleDrawerClose} sx={{ color: "white" }}>
+            {theme.direction === "ltr" ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </DrawerHeader>
-        <Divider />
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
         <List>
-          <Link to={"/"}>
+          {/* Hanya menyisakan menu Home di dashboard utama */}
+          <Link to="/" key="/">
             <ListItem disablePadding>
               <ListItemButton
                 sx={{
-                  color: `${location.pathname === "/" ? "blue" : "black"}`,
-                  backgroundColor: `${
-                    location.pathname === "/" ? "#dbdbdb" : ""
-                  }`,
+                  color: location.pathname === "/" ? "#FFA500" : "white",
+                  backgroundColor: location.pathname === "/" ? "rgba(255, 165, 0, 0.1)" : "transparent",
+                  borderLeft: location.pathname === "/" ? "4px solid #FFA500" : "4px solid transparent",
+                  "&:hover": {
+                    backgroundColor: "rgba(255, 165, 0, 0.08)",
+                    borderLeft: "4px solid #FFA500",
+                  },
+                  transition: "all 0.3s ease-in-out",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    color: `${location.pathname === "/" ? "blue" : "black"}`,
-                  }}
-                >
+                <ListItemIcon sx={{ color: "inherit" }}>
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText>Home</ListItemText>
               </ListItemButton>
             </ListItem>
           </Link>
-          <Divider />
-          <Link to={"/warehouse"}>
-            <ListItem disablePadding>
-              <ListItemButton
-                sx={{
-                  color: `${
-                    location.pathname === "/warehouse" ? "blue" : "black"
-                  }`,
-                  backgroundColor: `${
-                    location.pathname === "/warehouse" ? "#dbdbdb" : ""
-                  }`,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    color: `${
-                      location.pathname === "/warehouse" ? "blue" : "black"
-                    }`,
-                  }}
-                >
-                  <FactoryIcon />
-                </ListItemIcon>
-                <ListItemText>Warehouse</ListItemText>
-              </ListItemButton>
-            </ListItem>
-          </Link>
-          <Divider />
-          <Link to={"/products"}>
-            <ListItem disablePadding>
-              <ListItemButton
-                sx={{
-                  color: `${
-                    location.pathname === "/products" ? "blue" : "black"
-                  }`,
-                  backgroundColor: `${
-                    location.pathname === "/products" ? "#dbdbdb" : ""
-                  }`,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    color: `${
-                      location.pathname === "/products" ? "blue" : "black"
-                    }`,
-                  }}
-                >
-                  <ProductionQuantityLimitsIcon />
-                </ListItemIcon>
-                <ListItemText>Products</ListItemText>
-              </ListItemButton>
-            </ListItem>
-          </Link>
-          <Divider />
-          <ListItemButton onClick={handleClick} sx={{ color: "black" }}>
-            <ListItemIcon sx={{ color: "black" }}>
+
+          <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
+          
+          {/* Menu Inventory yang diperluas */}
+          <ListItemButton 
+            onClick={handleClick} 
+            sx={{ 
+              color: "white",
+              "&:hover": {
+                backgroundColor: "rgba(255, 165, 0, 0.08)",
+              }
+            }}
+          >
+            <ListItemIcon sx={{ color: "white" }}>
               <InventoryIcon />
             </ListItemIcon>
             <ListItemText primary="Inventory" />
             {inventory ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          <Divider />
+
           <Collapse in={inventory} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <Link to={"/machine"}>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{
-                      color: `${
-                        location.pathname === "/machine" ? "blue" : "black"
-                      }`,
-                      backgroundColor: `${
-                        location.pathname === "/machine" ? "#dbdbdb" : ""
-                      }`,
-                      paddingLeft: 4,
-                    }}
-                  >
-                    <ListItemIcon
+              {[
+                { to: "/warehouse", icon: <FactoryIcon />, label: "Warehause" },
+                { to: "/products", icon: <ProductionQuantityLimitsIcon />, label: "Products" },
+                { to: "/machine", icon: <AdfScannerIcon />, label: "Machine" },
+                { to: "/material", icon: <CategoryIcon />, label: "Material" },
+              ].map((item) => (
+                <Link to={item.to} key={item.to}>
+                  <ListItem disablePadding>
+                    <ListItemButton
                       sx={{
-                        color: `${
-                          location.pathname === "/machine" ? "blue" : "black"
-                        }`,
+                        pl: 4,
+                        color: location.pathname === item.to ? "#FFA500" : "white",
+                        backgroundColor: location.pathname === item.to ? "rgba(255, 165, 0, 0.1)" : "transparent",
+                        borderLeft: location.pathname === item.to ? "4px solid #FFA500" : "4px solid transparent",
+                        "&:hover": {
+                          backgroundColor: "rgba(255, 165, 0, 0.08)",
+                          borderLeft: "4px solid #FFA500",
+                        },
+                        transition: "all 0.3s ease-in-out",
                       }}
                     >
-                      <AdfScannerIcon />
-                    </ListItemIcon>
-                    <ListItemText>Machine</ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <Divider />
-              <Link to={"/material"}>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{
-                      color: `${
-                        location.pathname === "/material" ? "blue" : "black"
-                      }`,
-                      backgroundColor: `${
-                        location.pathname === "/material" ? "#dbdbdb" : ""
-                      }`,
-                      paddingLeft: 4,
-                    }}
-                  >
-                    <ListItemIcon
-                      sx={{
-                        color: `${
-                          location.pathname === "/material" ? "blue" : "black"
-                        }`,
-                      }}
-                    >
-                      <CategoryIcon />
-                    </ListItemIcon>
-                    <ListItemText>Material</ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-              <Divider />
+                      <ListItemIcon sx={{ color: "inherit" }}>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.label} />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              ))}
             </List>
           </Collapse>
         </List>
       </Drawer>
+
       <Main open={open}>
         <DrawerHeader />
         {children}
@@ -376,3 +337,4 @@ export default function Frame({ children }) {
     </Box>
   );
 }
+
